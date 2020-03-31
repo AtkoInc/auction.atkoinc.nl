@@ -1,0 +1,35 @@
+{
+  "name": "auction.atko.nl",
+  "version": "1.0.0",
+  "description": "Buy and sell the finest blooms with an Okta authorized AWS API Gateway.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon .",
+    "start": "node .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AtkoInc/auction.atkoinc.nl.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AtkoInc/auction.atkoinc.nl/issues"
+  },
+  "homepage": "https://github.com/AtkoInc/auction.atkoinc.nl#readme",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^4.0.0",
+    "express-session": "^1.17.0",
+    "passport": "^0.4.1",
+    "passport-openidconnect": "0.0.2",
+    "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
