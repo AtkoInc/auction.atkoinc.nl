@@ -1,1 +1,10 @@
-This is an authenticated landing page
+The following auctions are in progress:
+{{error}}
+{{#each listings}}
+    <div>
+        {{this.info.product}}
+        from {{this.info.region}}
+        sold by {{this.info.seller}}
+        Current Bid: {{this.info.currentprice}}
+    </div>
+{{/each}}

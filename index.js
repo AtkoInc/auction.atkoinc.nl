@@ -2,9 +2,8 @@ require('dotenv').config()
 const express = require('express')
 const hbs  = require('express-handlebars')
 const session = require('express-session')
-const axios = require('axios')
-const bodyParser = require('body-parser')
-const urlencodedParser = bodyParser.urlencoded({ extended: true });
+
+const Auctions = require('./auction')
 
 var passport = require('passport');
 var logger = require('./logger')
@@ -83,10 +82,20 @@ router.get("/", tr.ensureAuthenticated(), async (req, res, next) => {
     logger.verbose("/ requested")
     const requestingTenant = tr.getRequestingTenant(req);
 
-    res.render("index",{
-        tenant: requestingTenant.tenant,
-    });
+    try {
+        var auctions = await Auctions.getAuctions( req.userContext.tokens.access_token)
 
+        res.render("index",{
+            tenant: requestingTenant.tenant,
+            listings: auctions
+        });
+    }
+    catch(err){
+        res.render("index",{
+            tenant: tr.getRequestingTenant(req).tenant,
+            error: err
+        })
+    }
 });
 
 app.get("/logout", tr.ensureAuthenticated(), (req, res) => {
