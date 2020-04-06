@@ -2,6 +2,8 @@ require('dotenv').config()
 const express = require('express')
 const hbs  = require('express-handlebars')
 const session = require('express-session')
+const bodyParser = require('body-parser')
+const urlencodedParser = bodyParser.urlencoded({ extended: true });
 
 const Auctions = require('./auction')
 
@@ -15,6 +17,8 @@ const PORT = process.env.PORT || 3000;
 
 app = express();
 
+app.use(urlencodedParser);
+
 app.engine('hbs',  hbs( { 
     extname: 'hbs', 
     defaultLayout: 'main', 
@@ -23,6 +27,12 @@ app.engine('hbs',  hbs( {
     helpers: {
         ifEquals: (arg1, arg2, options) => {
             return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+        },
+        json: (context) => {
+            return JSON.stringify(context)
+        },
+        nextBid: (listinginfo) => {
+            return listinginfo.nextBid()
         }
     }
   } ) );
@@ -83,8 +93,7 @@ router.get("/", tr.ensureAuthenticated(), async (req, res, next) => {
     const requestingTenant = tr.getRequestingTenant(req);
 
     try {
-        var auctions = await Auctions.getAuctions( req.userContext.tokens.access_token)
-
+        var auctions = await Auctions.getAuctions(req.userContext.tokens.access_token)
         res.render("index",{
             tenant: requestingTenant.tenant,
             listings: auctions
@@ -97,6 +106,20 @@ router.get("/", tr.ensureAuthenticated(), async (req, res, next) => {
         })
     }
 });
+
+router.post("/bid", tr.ensureAuthenticated(), async (req, res, next) => {
+    logger.verbose("/bid requested")
+    const requestingTenant = tr.getRequestingTenant(req);
+    try {
+        await Auctions.submitBid(req.userContext.tokens.access_token, req.body.auction, req.body.userBid)
+        res.redirect("/");
+    }
+    catch(err){
+        res.render("error",{
+            msg: err
+           });
+    }
+})
 
 app.get("/logout", tr.ensureAuthenticated(), (req, res) => {
     logger.verbose("/logout requsted")

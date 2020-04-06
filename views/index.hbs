@@ -5,6 +5,14 @@ The following auctions are in progress:
         {{this.info.product}}
         from {{this.info.region}}
         sold by {{this.info.seller}}
-        Current Bid: {{this.info.currentprice}}
+        Current Bid: ${{this.info.currentprice}}
+        <div>
+            <h2>Bid</h2>
+            <form action="/bid" method="post">
+                <input id="userBid" name="userBid" value="{{nextBid this.info}}"/>
+                <input id="auction" name="auction" value="{{this.lot}}"/>
+                <button type="submit">BID</button>
+            </form>
+        </div>
     </div>
 {{/each}}

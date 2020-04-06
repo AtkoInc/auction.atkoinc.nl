@@ -6,7 +6,7 @@ class ListingInfo {
             try {
                 this.seller = infoJson.seller
                 this.product = infoJson.product
-                this.currentprice = infoJson.currentprice
+                this.currentprice = infoJson.currentprice.toFixed(2)
                 this.region = infoJson.region
                 this.startprice = infoJson.startprice
             }
@@ -14,6 +14,10 @@ class ListingInfo {
                 logger.error(error);
             }
         }
+    }
+
+    nextBid(){
+        return (parseFloat(this.currentprice) + 0.01).toFixed(2)
     }
 }
 
